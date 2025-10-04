@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="AnXin">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://www.anxin-hitsz.com/2025/10/04/【黑马程序员】-第一阶段-第四章：python-循环语句/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【黑马程序员】 第一阶段-第四章：Python 循环语句">
+<meta property="og:url" content="http://www.anxin-hitsz.com/2025/10/04/%E3%80%90%E9%BB%91%E9%A9%AC%E7%A8%8B%E5%BA%8F%E5%91%98%E3%80%91-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5-%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9APython-%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/index.html">
+<meta property="og:site_name" content="AnXin&#39;s CodeWorld">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.anxin-hitsz.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-10-04T06:17:07.000Z">
+<meta property="article:modified_time" content="2025-10-04T06:20:02.814Z">
+<meta property="article:author" content="AnXin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.anxin-hitsz.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            【黑马程序员】 第一阶段-第四章：Python 循环语句 | AnXin-HITSZ
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.anxin-hitsz.com","root":"/","language":"zh-CN"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"AnXin's CodeWorld","subtitle":{"text":["藏器于身，待时而动。"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/AnXin-HITSZ","instagram":null,"zhihu":null,"twitter":null,"email":"anxin.hitsz@outlook.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Categories":{"path":"/categories","icon":"fa-regular fa-list"},"ShuoShuo":{"icon":"fa-solid fa-comment-dots","path":"/essays"},"Links":{"icon":"fa-regular fa-link","submenus":{"Github":"https://github.com/AnXin-HITSZ"}},"Github":{"icon":"fa-brands fa-github","path":"https://github.com/AnXin-HITSZ/AnXin-HITSZ.github.io"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Gallery":{"path":"/masonry","icon":"fa-solid fa-image"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/10/02 12:00:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                AnXin-HITSZ
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories"
+                                        >
+                                    <i class="fa-regular fa-list fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/essays"
+                                        >
+                                    <i class="fa-solid fa-comment-dots fa-fw"></i>
+                                    说说
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    链接
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ">
+                                                    GITHUB
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ/AnXin-HITSZ.github.io"
+                                        >
+                                    <i class="fa-brands fa-github fa-fw"></i>
+                                    GITHUB
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-regular fa-list fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/essays"
+                        >
+                            <span>
+                                说说
+                            </span>
+                            
+                                <i class="fa-solid fa-comment-dots fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Links"
+                        >
+                            <span>
+                                链接
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Links">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ">GITHUB</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ/AnXin-HITSZ.github.io"
+                        >
+                            <span>
+                                GITHUB
+                            </span>
+                            
+                                <i class="fa-brands fa-github fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/masonry"
+                        >
+                            <span>Gallery</span>
+                            <i class="fa-solid fa-image fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">【黑马程序员】 第一阶段-第四章：Python 循环语句</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="https://avatars.githubusercontent.com/u/230795305?v=4">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">AnXin</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-04 14:17:07</span>
+        <span class="mobile">2025-10-04 14:17:07</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-04 14:20:02</span>
+            <span class="mobile">2025-10-04 14:20:02</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Python/">Python</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/Python/%E9%BB%91%E9%A9%AC%E7%A8%8B%E5%BA%8F%E5%91%98/">黑马程序员</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<blockquote>
+</blockquote>
+<p><strong>目录：</strong></p>
+<p>[TOC]</p>
+<hr>
+<p>循环普遍存在于日常生活中。同样，在程序中，循环功能也是至关重要的基础功能。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250919105640.png"
+                     
+                ></p>
+<p>循环在程序中同判断一样，也是广泛存在的，是非常多功能实现的基础。</p>
+<p>循环同样是程序最基础、最核心的逻辑功能。</p>
+<h2 id="一、while-循环的基础应用"><a href="#一、while-循环的基础应用" class="headerlink" title="一、while 循环的基础应用"></a>一、while 循环的基础应用</h2><p>生活中的循环：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250919105736.png"
+                     
+                ></p>
+<p><code>while</code> 循环语句的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> 条件:</span><br><span class="line">    条件满足时，做的事情 <span class="number">1</span></span><br><span class="line">    条件满足时，做的事情 <span class="number">2</span></span><br><span class="line">    条件满足时，做的事情 <span class="number">3</span></span><br><span class="line">    ...（省略）...</span><br></pre></td></tr></table></figure></div>
+<p>由上述语法格式可知：只要条件满足，会无限循环执行。</p>
+<p>设置循环终止条件的 <code>while</code> 循环语句的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">100</span>:</span><br><span class="line">    ...（省略）...</span><br><span class="line">    i += <span class="number">1</span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>while</code> 循环注意点：</p>
+<ul>
+<li><code>while</code> 的条件需得到布尔类型：<code>True</code> 表示继续循环，<code>False</code> 表示结束循环。</li>
+<li>需要设置循环终止的条件：如 <code>i += 1</code> 配合 <code>i &lt; 100</code>，就能确保 100 次后停止，否则将无限循环。</li>
+<li>空格缩进和 <code>if</code> 判断一样，都需要设置。</li>
+</ul>
+<h2 id="二、while-循环猜数字案例"><a href="#二、while-循环猜数字案例" class="headerlink" title="二、while 循环猜数字案例"></a>二、while 循环猜数字案例</h2><p>猜数字案例：</p>
+<blockquote>
+<p>设置一个范围 1 - 100 的随机整数变量，通过 <code>while</code> 循环，配合 input 语句，判断输入的数字是否等于随机数。</p>
+<p>要求：</p>
+<ul>
+<li>无限次机会，直到猜中为止；</li>
+<li>每一次猜不中，会提示大了或小了；</li>
+<li>猜完数字后，提示猜了几次。</li>
+</ul>
+<p>提示：</p>
+<ul>
+<li>无限次机会，终止条件不适合用数字累加来判断：<ul>
+<li>可以考虑布尔类型本身（<code>True</code> or <code>False</code>）。</li>
+</ul>
+</li>
+<li>需要提示几次猜中，就需要提供数字累加功能。</li>
+<li>随机数可以使用：<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line">num = random.randint(<span class="number">1</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure></div>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920095250.png"
+                     
+                ></li>
+</ul>
+</blockquote>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">演示 while 循环的基础案例 - 猜数字</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 获取范围在 1 - 100 的随机数字</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">num = random.randint(<span class="number">1</span>, <span class="number">100</span>)</span><br><span class="line"><span class="comment"># 定义一个变量，记录总共猜测了多少次</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过一个布尔类型的变量，做循环是否继续的标记</span></span><br><span class="line">flag = <span class="literal">True</span></span><br><span class="line"><span class="keyword">while</span> flag:</span><br><span class="line">    guess_num = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;请输入你猜测的数字：&quot;</span>))</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> guess_num == num:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;猜中了&quot;</span>)</span><br><span class="line">        <span class="comment"># 设置为 False 就是终止循环的条件</span></span><br><span class="line">        flag = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> guess_num &gt; num:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;你猜的大了&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;你猜的小了&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;你总共猜测了 <span class="subst">&#123;count&#125;</span> 次&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="三、while-循环的嵌套应用"><a href="#三、while-循环的嵌套应用" class="headerlink" title="三、while 循环的嵌套应用"></a>三、while 循环的嵌套应用</h2><p>生活中的嵌套循环：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920100844.png"
+                     
+                ></p>
+<p><code>while</code> 循环的嵌套的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> 条件 <span class="number">1</span>:</span><br><span class="line">    条件 <span class="number">1</span> 满足时，做的事情 <span class="number">1</span></span><br><span class="line">    条件 <span class="number">1</span> 满足时，做的事情 <span class="number">2</span></span><br><span class="line">    条件 <span class="number">1</span> 满足时，做的事情 <span class="number">3</span></span><br><span class="line">    ...（省略）...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> 条件 <span class="number">2</span>:</span><br><span class="line">        条件 <span class="number">2</span> 满足时，做的事情 <span class="number">1</span></span><br><span class="line">        条件 <span class="number">2</span> 满足时，做的事情 <span class="number">2</span></span><br><span class="line">        条件 <span class="number">2</span> 满足时，做的事情 <span class="number">3</span></span><br><span class="line">        ...（省略）...</span><br></pre></td></tr></table></figure></div>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 表白 100 天</span></span><br><span class="line"><span class="comment"># 每一天都会送 10 朵玫瑰花</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt;= <span class="number">100</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;今天是第 <span class="subst">&#123;i&#125;</span> 天，准备表白……&quot;</span>)</span><br><span class="line">    j = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> j &lt;= <span class="number">10</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;送给小美第 <span class="subst">&#123;j&#125;</span> 只玫瑰花&quot;</span>)</span><br><span class="line">        j += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;小美，我喜欢你&quot;</span>)</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;坚持到第 <span class="subst">&#123;i - <span class="number">1</span>&#125;</span> 天，表白成功&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p><code>while</code> 循环的嵌套的注意点：</p>
+<ul>
+<li>同判断语句的嵌套一样，循环语句的嵌套也要注意空格缩进：<ul>
+<li>基于空格缩进来决定层次关系。</li>
+</ul>
+</li>
+<li>注意条件的设置，避免出现无限循环（除非真的需要无限循环）。</li>
+</ul>
+<h2 id="四、while-循环案例-九九乘法表"><a href="#四、while-循环案例-九九乘法表" class="headerlink" title="四、while 循环案例 - 九九乘法表"></a>四、while 循环案例 - 九九乘法表</h2><h3 id="4-1-补充知识-print-输出不换行"><a href="#4-1-补充知识-print-输出不换行" class="headerlink" title="4.1 补充知识 - print 输出不换行"></a>4.1 补充知识 - print 输出不换行</h3><p>默认 <code>print</code> 语句输出内容会自动换行。在即将完成的案例中，我们需要使用 <code>print</code> 语句的输出不换行的功能，实现方式如下：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Hello&quot;</span>, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;World&quot;</span>, end=<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>输出结果：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HelloWorld</span><br></pre></td></tr></table></figure></div>
+
+<p>如上述代码所示，在 <code>print</code> 语句中加上 <code>end=&#39;&#39;</code>，即可输出不换行了。</p>
+<blockquote>
+<p>注意：<code>end=&#39;&#39;</code> 是使用的方法传参功能，我们在后面会详细讲解。</p>
+</blockquote>
+<h3 id="4-2-补充知识-制表符-t"><a href="#4-2-补充知识-制表符-t" class="headerlink" title="4.2 补充知识 - 制表符 \t"></a>4.2 补充知识 - 制表符 <code>\t</code></h3><p>在字符串中，有一个特殊符号 <code>\t</code>，效果等同于在键盘上按下 tab 键，它可以让我们的多行字符串进行对齐。</p>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用空格无法对齐</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Hello World&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;itheima best&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 \t 后，可以对齐</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Hello\tWorld&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;itheima\tbest&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>输出结果：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br><span class="line">itheima best</span><br><span class="line">Hello   World</span><br><span class="line">itheima best</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-3-练习案例-打印九九乘法表"><a href="#4-3-练习案例-打印九九乘法表" class="headerlink" title="4.3 练习案例 - 打印九九乘法表"></a>4.3 练习案例 - 打印九九乘法表</h3><p>练习案例 - 打印九九乘法表：</p>
+<blockquote>
+<p>通过 <code>while</code> 循环，输出如下九九乘法表内容：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920103727.png"
+                     
+                ></p>
+<p>提示：</p>
+<ul>
+<li>2 层循环，外层控制行，内层控制列；</li>
+<li>通过设置外层循环和内层循环的累加数字变量，用以辅助输出乘法表的数值。</li>
+</ul>
+</blockquote>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">演示使用 while 的嵌套循环</span></span><br><span class="line"><span class="string">打印输出九九乘法表</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义外层循环的控制变量</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt;= <span class="number">9</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义内层循环的控制变量</span></span><br><span class="line">    j = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> j &lt;= i:</span><br><span class="line">        <span class="comment"># 内层循环的 print 语句，不要换行，通过 \t 制表符进行对齐</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;j&#125;</span> * <span class="subst">&#123;i&#125;</span> = <span class="subst">&#123;j * i&#125;</span>\t&quot;</span>, end = <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        j += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>() <span class="comment"># print 空内容，就是输出一个换行</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="五、for-循环的基础语法"><a href="#五、for-循环的基础语法" class="headerlink" title="五、for 循环的基础语法"></a>五、for 循环的基础语法</h2><p>除了 <code>while</code> 循环语句外，Python 同样提供了 <code>for</code> 循环语句。</p>
+<p>两者能完成的功能基本差不多，但仍有一些区别：</p>
+<ul>
+<li><code>while</code> 循环的循环条件是自定义的，自行控制循环条件；</li>
+<li><code>for</code> 循环是一种“轮询”机制，是对一批内容进行“逐个处理”。</li>
+</ul>
+<p><code>while</code> 循环与 <code>for</code> 循环的比较：</p>
+<ul>
+<li><code>while</code> 循环：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920111140.png"
+                      alt="while 循环"
+                ></li>
+<li><code>for</code> 循环：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920111356.png"
+                      alt="for 循环"
+                ></li>
+</ul>
+<p>因此，<code>for</code> 循环就是将“待办事项”逐个完成的循环机制。</p>
+<p>生活中的 <code>for</code> 循环：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920111513.png"
+                     
+                ></p>
+<p><code>for</code> 循环的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 临时变量 <span class="keyword">in</span> 待处理数据集（序列）:</span><br><span class="line">    循环满足条件时执行的代码</span><br></pre></td></tr></table></figure></div>
+
+<p><code>for</code> 循环将会从待处理数据集中：逐个取出数据赋值给临时变量。</p>
+<p>使用 <code>for</code> 循环语句遍历字符串：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义字符串 name</span></span><br><span class="line">name = <span class="string">&quot;itheima&quot;</span></span><br><span class="line"><span class="comment"># for 循环处理字符串</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> name:</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br></pre></td></tr></table></figure></div>
+<p>由上述代码可以看出，<code>for</code> 循环是将字符串的内容依次取出。所以，<code>for</code> 循环也被称之为遍历循环。</p>
+<p>同 <code>while</code> 循环不同：<code>for</code> 循环是无法定义循环条件的，只能从被处理的数据集中依次取出内容进行处理。所以，理论上讲，Python 的 <code>for</code> 循环无法构建无限循环（被处理的数据集不可能无限大）。</p>
+<p><code>for</code> 循环的注意点：</p>
+<ul>
+<li>无法定义循环条件，只能被动取出数据处理；</li>
+<li>要注意，循环内的语句，需要有空格缩进。</li>
+</ul>
+<h2 id="六、range-语句"><a href="#六、range-语句" class="headerlink" title="六、range 语句"></a>六、range 语句</h2><p>对于 <code>for</code> 循环的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 临时变量 <span class="keyword">in</span> 待处理数据集（可迭代对象）:</span><br><span class="line">    循环满足条件时执行的代码</span><br></pre></td></tr></table></figure></div>
+<p>其中，语法中的待处理数据集严格来说称之为可迭代类型（序列类型）。可迭代类型（序列类型）指其内容可以一个个依次取出的一种类型，包括字符串、列表、元组等；目前我们只学习了字符串类型，其余类型在后续章节会详细学习它们。</p>
+<p><code>for</code> 循环语句本质上是遍历可迭代对象（序列类型）。尽管除字符串外，其他可迭代类型（序列类型）目前没学习到，但不妨碍我们通过学习 <code>range</code> 语句获得一个简单的数字序列（可迭代类型的一种）。</p>
+<p>range 语句的语法：</p>
+<ol>
+<li>语法 1：</li>
+</ol>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">range</span>(num)</span><br></pre></td></tr></table></figure></div>
+<p>获取一个从 <code>0</code> 开始到 <code>num</code> 结束的数字序列（不含 <code>num</code> 本身）。<br>如 <code>range(5)</code> 取得的数据是：<code>[0, 1, 2, 3, 4]</code>。</p>
+<ol start="2">
+<li>语法 2：</li>
+</ol>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">range</span>(num1, num2)</span><br></pre></td></tr></table></figure></div>
+<p>获得一个从 <code>num1</code> 开始到 <code>num2</code> 结束的数字序列（不含 <code>num2</code> 本身）。<br>如 <code>range(5, 10)</code> 取得的数据是：<code>[5, 6, 7, 8, 9]</code>。</p>
+<ol start="3">
+<li>语法 3：</li>
+</ol>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">range</span>(num1, num2, step)</span><br></pre></td></tr></table></figure></div>
+<p>获得一个从 <code>num1</code> 开始到 <code>num2</code> 结束的数字序列（不含 <code>num2</code> 本身），数字之间的步长以 <code>step</code> 为准（<code>step</code> 默认为 <code>1</code>）。<br>如 <code>range(5, 10, 2)</code> 取得的数据是：<code>[5, 7, 9]</code>。</p>
+<p><code>for</code> 循环遍历 <code>range</code> 序列：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for 循环处理字符串</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure></div>
+<p>输出结果：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="七、for-循环临时变量作用域"><a href="#七、for-循环临时变量作用域" class="headerlink" title="七、for 循环临时变量作用域"></a>七、for 循环临时变量作用域</h2><p>如下图所示：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920190804.png"
+                     
+                ><br>思考一下：红框中的 <code>print</code> 语句，能否访问到变量 <code>i</code>？</p>
+<ul>
+<li>规则上：不允许；</li>
+<li>实际上：可以。</li>
+</ul>
+<p><code>for</code> 循环的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 临时变量 <span class="keyword">in</span> 待处理数据集:</span><br><span class="line">    循环满足条件时执行的代码</span><br></pre></td></tr></table></figure></div>
+<p>回看 <code>for</code> 循环的语法，我们会发现，<code>for</code> 循环将从数据集（序列）中取出的数据赋值给临时变量。为什么是临时的呢？</p>
+<p>在编程规范上，临时变量的作用范围（作用域）只限定在 <code>for</code> 循环内部。如果在 <code>for</code> 循环外部访问临时变量：</p>
+<ul>
+<li>实际上是可以访问到的；</li>
+<li>在编程规范上，是不允许、不建议这么做的。</li>
+</ul>
+<p>如果实在需要在循环外访问循环内的临时变量，可以在循环外预先定义：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure></div>
+<p>如上述代码所示，每一次循环的时候，都会将取出的值赋予 <code>i</code> 变量。由于 <code>i</code> 变量是在循环之前（外）定义的，因此在循环外访问 <code>i</code> 变量是合理的、允许的。</p>
+<h2 id="八、for-循环的嵌套使用"><a href="#八、for-循环的嵌套使用" class="headerlink" title="八、for 循环的嵌套使用"></a>八、for 循环的嵌套使用</h2><p>同 <code>while</code> 一样，<code>for</code> 循环也支持嵌套使用。</p>
+<p>生活中的嵌套循环：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920192545.png"
+                     
+                ></p>
+<p>嵌套 <code>for</code> 循环的语法格式：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 临时变量 <span class="keyword">in</span> 待处理数据集（序列）:</span><br><span class="line">    循环满足条件应做的事情 <span class="number">1</span></span><br><span class="line">    循环满足条件应做的事情 <span class="number">2</span></span><br><span class="line">    循环满足条件应做的事情 N</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">for</span> 临时变量 <span class="keyword">in</span> 待处理数据集（序列）:</span><br><span class="line">        循环满足条件应做的事情 <span class="number">1</span></span><br><span class="line">        循环满足条件应做的事情 <span class="number">2</span></span><br><span class="line">        循环满足条件应做的事情 N</span><br></pre></td></tr></table></figure></div>
+
+<p>同样以向小美表白的案例为例：</p>
+<ul>
+<li>坚持表白 100 天；</li>
+<li>每天送花 10 束。</li>
+</ul>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 表白 100 天</span></span><br><span class="line"><span class="comment"># 每一天都会送 10 朵玫瑰花</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">101</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;今天是向小美表白的第 <span class="subst">&#123;i&#125;</span> 天，坚持！&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;送给小美的第 <span class="subst">&#123;j&#125;</span> 朵玫瑰花&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;小美，我喜欢你（第 <span class="subst">&#123;i&#125;</span> 天的表白结束）&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;第 <span class="subst">&#123;i&#125;</span> 天，表白成功&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>for</code> 循环的嵌套注意点：</p>
+<ul>
+<li>如下如所示，和 <code>while</code> 循环一样，需要注意缩进；因为通过缩进，确定层次关系：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250920193344.png"
+                     
+                ></li>
+<li>我们目前学习了 2 个循环，分别为 <code>while</code> 循环和 <code>for</code> 循环，这两类循环语句是可以相互嵌套的。例如，小美表白的案例可以改为如下代码所示（举例 <code>while</code> 循环内嵌套 <code>for</code> 循环，同理可将该案例修改为 <code>for</code> 循环内嵌套 <code>while</code> 循环）：  <div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt;= <span class="number">100</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;今天是向小美表白的第 <span class="subst">&#123;i&#125;</span> 天，坚持！&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;送给小美的第 <span class="subst">&#123;j&#125;</span> 朵玫瑰花&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;小美，我喜欢你（第 <span class="subst">&#123;i&#125;</span> 天的表白结束）&quot;</span>)</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;表白第 <span class="subst">&#123;i - <span class="number">1</span>&#125;</span> 天，表白成功&quot;</span>)</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="九、continue-和-break"><a href="#九、continue-和-break" class="headerlink" title="九、continue 和 break"></a>九、continue 和 break</h2><p>Python 提供 <code>continue</code> 和 <code>break</code> 关键字，用以对循环进行临时跳过和直接结束。</p>
+<h3 id="9-1-continue"><a href="#9-1-continue" class="headerlink" title="9.1 continue"></a>9.1 continue</h3><p><code>continue</code> 关键字用于中断本次循环，直接进入下一次循环。</p>
+<p><code>continue</code> 可以用于 <code>for</code> 循环和 <code>while</code> 循环，效果一致。</p>
+<p>生活中的 <code>continue</code>：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250925100456.png"
+                     
+                ><br>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">101</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;追求小美的第 <span class="subst">&#123;i&#125;</span> 天，坚持……&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;给小美送早饭，比心&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;给小美送午饭，比心&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">input</span>(<span class="string">f&quot;今天小美的心情好像（0 好心情，1 坏心情）&quot;</span>) == <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;小美心情不好，晚饭不送了，撤退……&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>()</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;给小美送晚饭，送小美回家并表白&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>()</span><br></pre></td></tr></table></figure></div>
+
+<p><code>continue</code> 关键字只可以控制它所在的循环临时中断。例如：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250925100947.png"
+                     
+                ><br><code>continue</code> 只能控制上图编号 1 的 <code>for</code> 循环，对编号 2 的 <code>for</code> 循环无影响。</p>
+<h3 id="9-2-break"><a href="#9-2-break" class="headerlink" title="9.2 break"></a>9.2 break</h3><p><code>break</code> 关键字用于直接结束所在循环。</p>
+<p><code>break</code> 可以用于 <code>for</code> 循环和 <code>while</code> 循环，效果一致。</p>
+<p>生活中的 <code>break</code>：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250925101235.png"
+                     
+                ><br>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">101</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;追求小美的第 <span class="subst">&#123;i&#125;</span> 天，坚持……&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;给小美送早饭，比心&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;给小美送午饭，比心&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">input</span>(<span class="string">f&quot;如果你是小美，请告诉我你是否明确拒绝（0 再观察观察，1 不合适拒绝）&quot;</span>) == <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;小美拒绝我了，以后不追求小美了。T.T&quot;</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;给小美送晚饭，送小美回家并表白&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>()</span><br></pre></td></tr></table></figure></div>
+
+<p><code>break</code> 关键字同样只可以控制它所在的循环永久中断。例如：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_4_%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5_%E7%AC%AC%E5%9B%9B%E7%AB%A0/20250925101702.png"
+                     
+                ><br><code>break</code> 只能控制上图编号 1 的循环，对编号 2 的循环无影响。</p>
+<h2 id="十、循环综合案例"><a href="#十、循环综合案例" class="headerlink" title="十、循环综合案例"></a>十、循环综合案例</h2><p>练习案例：</p>
+<blockquote>
+<p>发工资：<br>某公司，账户余额有 1W 元，给 20 名员工发工资。</p>
+<ul>
+<li>员工编号从 1 到 20，从编号 1 开始，依次领取工资，每人可领取 1000 元；</li>
+<li>领工资时，财务判断员工的绩效分（1 - 10）（随机生成），如果低于 5，不发工资，换下一位；</li>
+<li>如果工资发完了，结束发工资。</li>
+</ul>
+<p>提示：</p>
+<ul>
+<li><code>continue</code> 用于跳过员工，<code>break</code> 直接结束发工资；<br>if 判断余额，不要忘记发工资后，余额减少 1000 哦。</li>
+</ul>
+</blockquote>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">演示循环综合案例：发工资</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义账户余额变量</span></span><br><span class="line">money = <span class="number">10000</span></span><br><span class="line"><span class="comment"># for 循环对员工发放工资</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">21</span>):</span><br><span class="line">    <span class="keyword">import</span> random</span><br><span class="line">    score = random.randint(<span class="number">1</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> score &lt; <span class="number">5</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;员工 <span class="subst">&#123;i&#125;</span> 绩效分 <span class="subst">&#123;score&#125;</span>，不满足，不发工资，下一位&quot;</span>)</span><br><span class="line">        <span class="comment"># continue 跳过发放</span></span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 要判断余额足不足</span></span><br><span class="line">    <span class="keyword">if</span> money &gt;= <span class="number">1000</span>:</span><br><span class="line">        money -= <span class="number">1000</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;员工 <span class="subst">&#123;i&#125;</span>，满足条件，发放工资 1000，公司账户余额：<span class="subst">&#123;money&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;余额不足，当前余额：<span class="subst">&#123;money&#125;</span> 元，不足以发工资，不发了，下个月再来&quot;</span>)</span><br><span class="line">        <span class="comment">#break 结束发放</span></span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure></div>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【黑马程序员】 第一阶段-第四章：Python 循环语句</li>
+        <li><strong>作者:</strong> AnXin</li>
+        <li><strong>创建于
+                :</strong> 2025-10-04 14:17:07</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-10-04 14:20:02
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://anxin-hitsz.github.io/2025/10/04/【黑马程序员】-第一阶段-第四章：Python-循环语句/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/10/04/%E3%80%90%E9%BB%91%E9%A9%AC%E7%A8%8B%E5%BA%8F%E5%91%98%E3%80%91-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5-%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9APython-%E5%87%BD%E6%95%B0/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【黑马程序员】 第一阶段-第五章：Python 函数</span>
+						<span class="post-nav-item">上一篇</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/04/%E3%80%90%E9%BB%91%E9%A9%AC%E7%A8%8B%E5%BA%8F%E5%91%98%E3%80%91-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5-%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9APython-%E5%88%A4%E6%96%AD%E8%AF%AD%E5%8F%A5/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【黑马程序员】 第一阶段-第三章：Python 判断语句</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">【黑马程序员】 第一阶段-第四章：Python 循环语句</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81while-%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8"><span class="nav-text">一、while 循环的基础应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81while-%E5%BE%AA%E7%8E%AF%E7%8C%9C%E6%95%B0%E5%AD%97%E6%A1%88%E4%BE%8B"><span class="nav-text">二、while 循环猜数字案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81while-%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%B5%8C%E5%A5%97%E5%BA%94%E7%94%A8"><span class="nav-text">三、while 循环的嵌套应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81while-%E5%BE%AA%E7%8E%AF%E6%A1%88%E4%BE%8B-%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8"><span class="nav-text">四、while 循环案例 - 九九乘法表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86-print-%E8%BE%93%E5%87%BA%E4%B8%8D%E6%8D%A2%E8%A1%8C"><span class="nav-text">4.1 补充知识 - print 输出不换行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86-%E5%88%B6%E8%A1%A8%E7%AC%A6-t"><span class="nav-text">4.2 补充知识 - 制表符 \t</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E7%BB%83%E4%B9%A0%E6%A1%88%E4%BE%8B-%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8"><span class="nav-text">4.3 练习案例 - 打印九九乘法表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81for-%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-text">五、for 循环的基础语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81range-%E8%AF%AD%E5%8F%A5"><span class="nav-text">六、range 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81for-%E5%BE%AA%E7%8E%AF%E4%B8%B4%E6%97%B6%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-text">七、for 循环临时变量作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81for-%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%B5%8C%E5%A5%97%E4%BD%BF%E7%94%A8"><span class="nav-text">八、for 循环的嵌套使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81continue-%E5%92%8C-break"><span class="nav-text">九、continue 和 break</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-continue"><span class="nav-text">9.1 continue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-break"><span class="nav-text">9.2 break</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E5%BE%AA%E7%8E%AF%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B"><span class="nav-text">十、循环综合案例</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+            <div class="customize-info my-1">Code is cheap, show me the prompt.</div>
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">AnXin</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 11 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

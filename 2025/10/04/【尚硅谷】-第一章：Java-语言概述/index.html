@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="AnXin">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://www.anxin-hitsz.com/2025/10/04/【尚硅谷】-第一章：java-语言概述/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【尚硅谷】 第一章：Java 语言概述">
+<meta property="og:url" content="http://www.anxin-hitsz.com/2025/10/04/%E3%80%90%E5%B0%9A%E7%A1%85%E8%B0%B7%E3%80%91-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9AJava-%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="AnXin&#39;s CodeWorld">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.anxin-hitsz.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-10-04T05:38:36.000Z">
+<meta property="article:modified_time" content="2025-10-04T05:43:32.374Z">
+<meta property="article:author" content="AnXin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.anxin-hitsz.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            【尚硅谷】 第一章：Java 语言概述 | AnXin-HITSZ
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.anxin-hitsz.com","root":"/","language":"zh-CN"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"AnXin's CodeWorld","subtitle":{"text":["藏器于身，待时而动。"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/AnXin-HITSZ","instagram":null,"zhihu":null,"twitter":null,"email":"anxin.hitsz@outlook.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Categories":{"path":"/categories","icon":"fa-regular fa-list"},"ShuoShuo":{"icon":"fa-solid fa-comment-dots","path":"/essays"},"Links":{"icon":"fa-regular fa-link","submenus":{"Github":"https://github.com/AnXin-HITSZ"}},"Github":{"icon":"fa-brands fa-github","path":"https://github.com/AnXin-HITSZ/AnXin-HITSZ.github.io"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Gallery":{"path":"/masonry","icon":"fa-solid fa-image"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/10/02 12:00:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                AnXin-HITSZ
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories"
+                                        >
+                                    <i class="fa-regular fa-list fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/essays"
+                                        >
+                                    <i class="fa-solid fa-comment-dots fa-fw"></i>
+                                    说说
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    链接
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ">
+                                                    GITHUB
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ/AnXin-HITSZ.github.io"
+                                        >
+                                    <i class="fa-brands fa-github fa-fw"></i>
+                                    GITHUB
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-regular fa-list fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/essays"
+                        >
+                            <span>
+                                说说
+                            </span>
+                            
+                                <i class="fa-solid fa-comment-dots fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Links"
+                        >
+                            <span>
+                                链接
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Links">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ">GITHUB</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           target="_blank" rel="noopener" href="https://github.com/AnXin-HITSZ/AnXin-HITSZ.github.io"
+                        >
+                            <span>
+                                GITHUB
+                            </span>
+                            
+                                <i class="fa-brands fa-github fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/masonry"
+                        >
+                            <span>Gallery</span>
+                            <i class="fa-solid fa-image fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">【尚硅谷】 第一章：Java 语言概述</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="https://avatars.githubusercontent.com/u/230795305?v=4">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">AnXin</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-04 13:38:36</span>
+        <span class="mobile">2025-10-04 13:38:36</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-04 13:43:32</span>
+            <span class="mobile">2025-10-04 13:43:32</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Java/">Java</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/Java/%E5%B0%9A%E7%A1%85%E8%B0%B7/">尚硅谷</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<blockquote>
+</blockquote>
+<p><strong>目录：</strong></p>
+<p>[TOC]</p>
+<hr>
+<blockquote>
+<p>JDK：Java 程序员需要的一套环境。</p>
+</blockquote>
+<h2 id="一、Java-知识脉络图"><a href="#一、Java-知识脉络图" class="headerlink" title="一、Java 知识脉络图"></a>一、Java 知识脉络图</h2><h3 id="1-1-Java-基础全程脉络图"><a href="#1-1-Java-基础全程脉络图" class="headerlink" title="1.1 Java 基础全程脉络图"></a>1.1 Java 基础全程脉络图</h3><blockquote>
+<p>大处着眼，小处着手。</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/Java%E5%9F%BA%E7%A1%80%E5%85%A8%E7%A8%8B%E8%84%89%E7%BB%9C%E5%9B%BE.png"
+                      alt="Java 基础全程脉络图" title="Java 基础全程脉络图"
+                ></p>
+<blockquote>
+<p>线程：即一条执行路径。</p>
+</blockquote>
+<h2 id="二、抽丝剥茧话-Java"><a href="#二、抽丝剥茧话-Java" class="headerlink" title="二、抽丝剥茧话 Java"></a>二、抽丝剥茧话 Java</h2><p>Java 是学习 JavaEE 后台、大数据、Android 开发的基石！</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220608160444947.png"
+                      alt="软件开发之 Java 开发" title="软件开发之 Java 开发"
+                ></p>
+<blockquote>
+<p>后台：进行数据的交互。</p>
+</blockquote>
+<ul>
+<li>移动应用领域（集成 Android 平台）：Java 在 Android 端是主要开发的语言，占有重要的地位；</li>
+<li>企业级应用领域（JavaEE 后台）：用来开发企业级的应用程序，大型网站如淘宝、京东、12306，以及各大物流、银行、金融、社交、医疗、交通、各种 OA 系统等都是用 JavaEE 技术开发的；</li>
+<li>大数据分析、人工智能领域：流行的大数据框架，如 Hadoop、Flink 都是用 Java 编写的；Spark 使用 Scala 编写，但可以用 Java 开发应用；</li>
+<li>游戏领域、桌面应用、嵌入式领域：很多大型游戏的后台、桌面应用等也是 Java 开发的。</li>
+</ul>
+<p>Java 系列课程体系：见《尚硅谷_宋红康_Java中高级程序员全程学习路线图.xmind》。</p>
+<h2 id="三、计算机的硬件与软件"><a href="#三、计算机的硬件与软件" class="headerlink" title="三、计算机的硬件与软件"></a>三、计算机的硬件与软件</h2><h3 id="3-1-计算机组成：硬件-软件"><a href="#3-1-计算机组成：硬件-软件" class="headerlink" title="3.1 计算机组成：硬件 + 软件"></a>3.1 计算机组成：硬件 + 软件</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220524152902812.png"
+                      alt="计算机组成（软件 + 硬件）" title="计算机组成（软件 + 硬件）"
+                ></p>
+<h3 id="3-2-计算机硬件的介绍"><a href="#3-2-计算机硬件的介绍" class="headerlink" title="3.2 计算机硬件的介绍"></a>3.2 计算机硬件的介绍</h3><h4 id="3-2-1-CPU、内存与硬盘"><a href="#3-2-1-CPU、内存与硬盘" class="headerlink" title="3.2.1 CPU、内存与硬盘"></a>3.2.1 CPU、内存与硬盘</h4><p>CPU（Central Processing Unit，中央处理器）：</p>
+<ul>
+<li>人靠大脑思考，电脑靠 CPU 来运算、控制。</li>
+</ul>
+<p>硬盘（Hard Disk Drive）：</p>
+<ul>
+<li>计算机最主要的存储设备，容量大，断电数据不丢失；</li>
+<li>正常分类：机械硬盘（HDD）、固态硬盘（SSD）以及混合硬盘（SSHD）；</li>
+<li>固态硬盘在开机速度和程序加载速度远远高于机械硬盘，缺点就是贵，所以无法完全取代机械硬盘。</li>
+</ul>
+<p>内存（Memory）：</p>
+<ul>
+<li>负责硬盘上的数据与 CPU 之间数据交换处理；</li>
+<li>具体的：保存从硬盘读取的数据，提供给 CPU 使用；保存 CPU 的一些临时执行结果，以便 CPU 下次使用或保存到硬盘；</li>
+<li>断电后数据丢失。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220731234604511.png"
+                      alt="CPU、内存、硬盘关系图" title="CPU、内存、硬盘关系图"
+                ></p>
+<h4 id="3-2-2-输入设备：键盘输入"><a href="#3-2-2-输入设备：键盘输入" class="headerlink" title="3.2.2 输入设备：键盘输入"></a>3.2.2 输入设备：键盘输入</h4><h3 id="3-3-软件相关介绍"><a href="#3-3-软件相关介绍" class="headerlink" title="3.3 软件相关介绍"></a>3.3 软件相关介绍</h3><h4 id="3-3-1-什么是软件"><a href="#3-3-1-什么是软件" class="headerlink" title="3.3.1 什么是软件"></a>3.3.1 什么是软件</h4><p>软件，即一系列按照特定顺序组织的计算机数据和指令的集合。有系统软件和应用软件之分。</p>
+<blockquote>
+<p>Pascal 之父 Nicklaus Wirth：“Programs &#x3D; Data Structures + Algorithms”。</p>
+</blockquote>
+<h4 id="3-3-2-人机交互方式"><a href="#3-3-2-人机交互方式" class="headerlink" title="3.3.2 人机交互方式"></a>3.3.2 人机交互方式</h4><p>图形化界面（Graphical User Interface，GUI），这种方式简单直观，使用者易于接受，容易上手操作。</p>
+<p>命令行方式（Command Line Interface，CLI），需要在控制台输入特定的指令，让计算机完成一些操作。需要记忆一些指令，较为麻烦。</p>
+<h4 id="3-3-3-常见的-DOS-命令"><a href="#3-3-3-常见的-DOS-命令" class="headerlink" title="3.3.3 常见的 DOS 命令"></a>3.3.3 常见的 DOS 命令</h4><p>DOS（Disk Operating System，磁盘操作系统）是 Microsoft 公司在 Windows 之前推出的一个操作系统，是单用户、单任务（即只能执行一个任务）的操作系统。现在被 Windows 系统取代。</p>
+<p>进入 DOS 操作窗口：按下 <code>Windows + R</code> 键盘，打开运行窗口，输入 <code>cmd</code> 回车，进入到 DOS 的操作窗口。</p>
+<p><strong>常用指令：</strong></p>
+<ul>
+<li>操作 1：进入和回退</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">操作</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>盘符名称:</code></td>
+<td align="center">盘符切换</td>
+</tr>
+<tr>
+<td align="center"><code>dir</code></td>
+<td align="center">列出当前目录下的文件以及文件夹</td>
+</tr>
+<tr>
+<td align="center"><code>cd 目录</code></td>
+<td align="center">进入指定单级目录</td>
+</tr>
+<tr>
+<td align="center"><code>cd 目录1\目录2\\...</code></td>
+<td align="center">进入指定多级目录</td>
+</tr>
+<tr>
+<td align="center"><code>cd ..</code></td>
+<td align="center">回退到上一级目录</td>
+</tr>
+<tr>
+<td align="center"><code>cd \</code> 或 <code>cd /</code></td>
+<td align="center">回退到盘符目录</td>
+</tr>
+</tbody></table>
+<ul>
+<li>操作 2：增、删</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">操作</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>md 文件目录名</code></td>
+<td align="center">创建指定的文件目录</td>
+</tr>
+<tr>
+<td align="center"><code>rd 文件目录名</code></td>
+<td align="center">删除指定的文件目录（如文件目录内有数据，删除失败）</td>
+</tr>
+<tr>
+<td align="center"><code>del 文件名</code></td>
+<td align="center">删除指定文件，例如 <code>del test1.txt</code></td>
+</tr>
+<tr>
+<td align="center"><code>del *.文件后缀</code></td>
+<td align="center">删除指定后缀的文件，例如 <code>del *.txt</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li>操作 3：其他</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">操作</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>cls</code></td>
+<td align="center">清屏</td>
+</tr>
+<tr>
+<td align="center"><code>exit</code></td>
+<td align="center">退出命令提示符窗口</td>
+</tr>
+<tr>
+<td align="center"><code>←</code>  <code>→</code></td>
+<td align="center">移动光标</td>
+</tr>
+<tr>
+<td align="center"><code>↑</code>  <code>↓</code></td>
+<td align="center">调阅历史操作命令</td>
+</tr>
+<tr>
+<td align="center">Delete 和 Backspace</td>
+<td align="center">删除字符</td>
+</tr>
+</tbody></table>
+<h2 id="四、计算机编程语言"><a href="#四、计算机编程语言" class="headerlink" title="四、计算机编程语言"></a>四、计算机编程语言</h2><p>计算机编程语言，就是人与计算机交流的方式。人们可以使用编程语言对计算机下达命令，让计算机完成人们需要的功能。</p>
+<p>计算机语言有很多种。如：C、C++、Java、Go、JavaScript、Python、Scala 等。</p>
+<blockquote>
+<p>体会：语言 &#x3D; 语法 + 逻辑。</p>
+</blockquote>
+<p>计算机语言简史：</p>
+<ul>
+<li>第一代：机器语言（相当于人类的石器时代）：<ul>
+<li>1946 年 2 月 14 日，世界上第一台计算机 ENAC 诞生，使用的是最原始的穿孔卡片。这种卡片使用的是用二进制代码表示的语言，与人类语言差别极大，这种语言就称为机器语言。</li>
+<li>这种语言本质上是计算机能识别的唯一语言，人类很难理解。</li>
+</ul>
+</li>
+<li>第二代：汇编语言（相当于人类的青铜&amp;铁器时代）：<ul>
+<li>使用英文缩写的助记符来表示基本的操作，这些助记符构成了汇编语言的基础。比如：<code>LOAD</code>、<code>MOVE</code> 等，使人更容易使用。因此，汇编语言也成为符号语言。</li>
+<li>优点：能编写高效率的程序。</li>
+<li>缺点：汇编语言是面向机器的，不同计算机机型特点不同，因此会有不同的汇编语言，彼此之间不能通用。程序不易移植，较难调试。</li>
+<li>比起机器语言，汇编大大进步了，是机器语言向更高级的语言进化的桥梁。目前仍然应用于工业电子编程领域、软件的加密解密、计算机病毒分析等。</li>
+</ul>
+</li>
+<li>第三代：高级语言（相当于人类的信息时代）：<ul>
+<li>高级语言发展于 20 世纪 50 年代中叶到 70 年代，是一种接近于人们使用习惯的程序设计语言。它允许程序员使用接近日常英语的指令来编写程序，程序中的符号和算式也与日常用的数学式子差不多，接近于自然语言和数学语言，容易为人们掌握。</li>
+<li>高级语言独立于机器，有一定的通用性；计算机不能直接识别和执行用高级语言编写的程序，需要使用编译器或者解释器，转换为机器语言才能被识别和执行。</li>
+</ul>
+</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20211218092630678.png"
+                      alt="高级语言、汇编语言和机器语言之间的转换关系" title="高级语言、汇编语言和机器语言之间的转换关系"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20211218092541075.png"
+                      alt="高级语言、汇编语言和机器语言的转换过程" title="高级语言、汇编语言和机器语言的转换过程"
+                ></p>
+<p>此外，高级语言按照程序设计方法的不同，又分为：面向过程的语言、面向对象的语言。</p>
+<ul>
+<li>C、Pascal、Fortran 面向过程的语言；</li>
+<li>C++ 面向过程 &#x2F; 面向对象；</li>
+<li>Java 跨平台的纯面向对象的语言；</li>
+<li>C#、Python、JavaScript、Scala…</li>
+</ul>
+<blockquote>
+<p>目前以及可预见的将来，计算机语言仍然处于“第三代高级语言”阶段。但是不管是什么语言，最后都要向机器语言靠近，因为 CPU 只认识 0 和 1。</p>
+</blockquote>
+<p>编程语言，该学哪个？</p>
+<ul>
+<li>C语言：万物之源；</li>
+<li>C++语言：难学的语言；</li>
+<li>C#语言：背靠大树的语言；</li>
+<li>PHP语言：最好的语言？</li>
+<li>Python：易学的语言；</li>
+<li>JavaScript语言：前端为王；</li>
+<li>Java语言：需求旺盛；</li>
+<li>Go语言：夹缝中生存。</li>
+</ul>
+<blockquote>
+<p>Talk is cheap, show me the code.</p>
+</blockquote>
+<h2 id="五、Java-语言概述"><a href="#五、Java-语言概述" class="headerlink" title="五、Java 语言概述"></a>五、Java 语言概述</h2><h3 id="5-1-Java-概述"><a href="#5-1-Java-概述" class="headerlink" title="5.1 Java 概述"></a>5.1 Java 概述</h3><p>Java 是 SUN（Stanford University Network，斯坦福大学网络公司）1995 年推出的一门高级编程语言，是一种面向 Internet 的编程语言。伴随着互联网的迅猛发展，以及 Java 技术在 web 方面的不断成熟，已经成为 Web 应用程序的首选开发语言。</p>
+<h3 id="5-2-Java-语言简史"><a href="#5-2-Java-语言简史" class="headerlink" title="5.2 Java 语言简史"></a>5.2 Java 语言简史</h3><p>Java 语言简史：</p>
+<ul>
+<li>起步阶段：</li>
+<li>发展阶段：<ul>
+<li>（2004.09.30）Java 5.0：版本号从 1.4 直接更新至5.0；平台更名为 JavaSE、JavaEE、JavaME；</li>
+<li>（2014.03.18）Java 8.0：此版本是继 Java 5.0 以来变化最大的版本，是长期支持版本（LTS）；</li>
+<li>（2018.09.25）Java 11.0：JDK 安装包取消独立 JRE 安装包，是长期支持版本（LTS）；</li>
+<li>（2021.09）Java 17.0：发布 Java 17.0，版本号也称为 21.9，是长期支持版本。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-3-Java-之父"><a href="#5-3-Java-之父" class="headerlink" title="5.3 Java 之父"></a>5.3 Java 之父</h3><p>詹姆斯·高斯林（James Gosling）先生以“Java 技术之父”而闻名于世。他是 Java 技术的创始人，他亲手设计了 Java 语言，并开发了 Java 编译器和 Java 虚拟机，使 Java 成为了世界上最流行的开发语言。</p>
+<h3 id="5-4-Java-技术体系平台"><a href="#5-4-Java-技术体系平台" class="headerlink" title="5.4 Java 技术体系平台"></a>5.4 Java 技术体系平台</h3><p>Java 技术体系平台：</p>
+<ul>
+<li>Java SE（Java Standard Edition）标准版：支持面向<strong>桌面级应用</strong>（如 Windows 下的应用程序）的 Java 平台，即定位个人计算机的应用开发；</li>
+<li>Java EE（Java Enterprise Edition）企业版：为开发企业环境下的应用程序提供的一套解决方案，即定位<strong>在服务器端的 Web 应用开发</strong>。</li>
+<li>Java ME（Java Micro Edition）小型版：支持 Java 程序运行在<strong>移动终端（手机、机顶盒）上的平台</strong>，即定位在消费性电子产品的应用开发。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20211218093009884.png"
+                      alt="Java 技术体系平台" title="Java 技术体系平台"
+                ></p>
+<h2 id="六、Java-开发环境搭建"><a href="#六、Java-开发环境搭建" class="headerlink" title="六、Java 开发环境搭建"></a>六、Java 开发环境搭建</h2><h3 id="6-1-什么是-JDK、JRE"><a href="#6-1-什么是-JDK、JRE" class="headerlink" title="6.1 什么是 JDK、JRE"></a>6.1 什么是 JDK、JRE</h3><p>JDK（Java Development Kit）是 Java 程序开发工具包，包含 JRE 和开发人员使用的工具。</p>
+<p>JRE（Java Runtime Environment）是 Java 程序的运行时环境，包含 JVM 和运行时所需要的核心类库。</p>
+<p>如下是 Java 8.0 Platform：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/JDKJRE.jpg"
+                      alt="Java 8.0 Platform" title="Java 8.0 Platform"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220310200731185.png"
+                      alt="JDK、JRE 和 JVM 的关系" title="JDK、JRE 和 JVM 的关系"
+                ></p>
+<blockquote>
+<p>小结：</p>
+<ul>
+<li>JDK &#x3D; JRE + 开发工具集（例如 Javac 编译工具等）；</li>
+<li>JRE &#x3D; JVM + Java SE 标准类库。</li>
+</ul>
+</blockquote>
+<h3 id="6-2-JDK-的下载"><a href="#6-2-JDK-的下载" class="headerlink" title="6.2 JDK 的下载"></a>6.2 JDK 的下载</h3><p>JDK 下载网址（Oracle 公司官网）：<a href="www.oracle.com">JDK 下载网址</a>。</p>
+<h3 id="6-3-配置-path-环境变量"><a href="#6-3-配置-path-环境变量" class="headerlink" title="6.3 配置 path 环境变量"></a>6.3 配置 path 环境变量</h3><p>接下来，我们需要配置 path 环境变量。</p>
+<p>path 环境变量是指 windows 操作系统执行命令时所要搜寻的路径，我们希望在命令行使用 javac.exe 等工具时，任意目录下都可以找到这个工具所在的目录，因此我们需要配置 path。</p>
+<p>在 JDK8 配置方案选择方面，推荐配置 JAVA_HOME + path。即在 系统变量 中，单击 新建，创建新的环境变量，变量名输入 <code>JAVA_HOME</code>，变量值输入 <code>D:\Developer\Java\Java_SE_24_0_2</code>，单击 确定；在 系统变量 中选中 Path 环境变量，双击 或者 点击编辑，在变量值的最前面，键入 <code>%JAVA_HOME%\bin</code>，即可配置完成环境变量。重启 DOS 命令行，在任意目录下输入 <code>javac</code> 或 <code>java</code> 命令或 <code>java -version</code>，运行成功。</p>
+<blockquote>
+<p>注意：强烈建议将 <code>%JAVA_HOME%\bin</code>声明在 path 环境变量中所有变量的最前面！</p>
+</blockquote>
+<p>小结如下：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220607115255562.png"
+                      alt="配置 path 环境变量 - 小结" title="配置 path 环境变量 - 小结"
+                ></p>
+<p>不管大家有没有提前安装 JDK8 或其他版本 JDK，在我们安装完 JDK17 之后，理应按 JDK8 的方式配置 path 环境变量。但是，我们发现安装完 JDK17 以后，配置环境变量之前，在 CMD 中执行命令 <code>java -version</code> 竟然成功了！而且是 17.0.2 版本。因为 JDK17 在安装之后，自动进行了环境变量的配置。如下：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220607115840388.png"
+                      alt="环境变量的自动配置" title="环境变量的自动配置"
+                ></p>
+<p>如上图所示，在 JDK17 安装完成后，自动创建上图中红框标出的环境变量，即自动进行了环境变量的配置。</p>
+<p>如果仍然希望在 JDK8 下开发 Java 程序，需要将 <code>%JAVA_HOME%\bin</code> 上移到首位，并重启 CMD 窗口。</p>
+<p>如果此后使用 JDK17 进行开发，这里建议，将 JDK17 安装的路径，设置为 <code>JAVA_HOME</code>，并将 <code>%JAVA_HOME%\bin</code> 上移到首位：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20221110142710972.png"
+                      alt="JAVA_HOME 变量值的设置" title="JAVA_HOME 变量值的设置"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20221110142734279.png"
+                      alt="%JAVA_HOME%\bin 在环境变量中的位置调整" title="%JAVA_HOME%\bin 在环境变量中的位置调整"
+                ></p>
+<h2 id="七、开发体验：HelloWorld"><a href="#七、开发体验：HelloWorld" class="headerlink" title="七、开发体验：HelloWorld"></a>七、开发体验：HelloWorld</h2><p>JDK 安装完毕，我们就可以开发第一个 Java 程序了，习惯性的称为：HelloWorld。</p>
+<blockquote>
+<p>都有哪些开发 Java 的工具：</p>
+<ul>
+<li>级别一：文本开发工具；</li>
+<li>级别二：集成开发环境（Integrated Development Environment，IDE）。</li>
+</ul>
+<p>前期我们先使用文本开发工具，培养代码感，利用公司笔、面试。<br>后期我们使用 IDE，提供更强大的功能支持。</p>
+</blockquote>
+<h3 id="7-1-开发步骤"><a href="#7-1-开发步骤" class="headerlink" title="7.1 开发步骤"></a>7.1 开发步骤</h3><p>Java 程序开发三步骤：编写、编译、运行：</p>
+<ul>
+<li>将 Java 代码编写到扩展名为 <code>.java</code> 的源文件中；</li>
+<li>通过 javac.exe 命令对该 java 文件进行编译，生成一个或多个字节码文件；</li>
+<li>通过 java.exe 命令对生成的 class 文件进行运行。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220310230210728.png"
+                      alt="Java 程序开发三步骤" title="Java 程序开发三步骤"
+                ></p>
+<h3 id="7-2-编写"><a href="#7-2-编写" class="headerlink" title="7.2 编写"></a>7.2 编写</h3><p>示例代码：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloChina</span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;hello, world!!你好，中国！&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>对于 Java 来说，我们编写的代码需要放在一个一个的类（class）当中。</p>
+</blockquote>
+<p>第一个 HelloWorld 源程序就编写完成了，但是这个文件是程序员编写的，JVM 是看不懂的，也就不能运行，因此我们必须将编写好的 Java 源文件编译成 JVM 可以看懂的字节码文件，也就是 <code>.class</code> 文件。</p>
+<h3 id="7-3-编译"><a href="#7-3-编译" class="headerlink" title="7.3 编译"></a>7.3 编译</h3><p>在 DOS 命令行中，使用 <code>javac</code> 命令进行编译：</p>
+<div class="code-container" data-rel="Dos"><figure class="iseeu highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac Java源文件名.后缀名java</span><br></pre></td></tr></table></figure></div>
+
+<p>举例：</p>
+<div class="code-container" data-rel="Dos"><figure class="iseeu highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac HelloWorld.java</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>在使用 <code>javac</code> 命令时，可以指定源文件的字符编码：</p>
+<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac -encoding utf-<span class="number">8</span> Review01.java</span><br></pre></td></tr></table></figure></div>
+<p>上述方式可以解决当 CMD 命令行窗口的字符编码与 <code>.java</code> 源文件的字符编码不一致的问题。</p>
+</blockquote>
+<p>编译成功后，命令行没有任何提示，在目录下发现产生了一个新的文件 <code>HelloChina.class</code>，该文件就是编译后的文件，是 Java 的可运行文件，称为字节码文件，有了字节码文件，就可以运行程序了。</p>
+<h3 id="7-4-运行"><a href="#7-4-运行" class="headerlink" title="7.4 运行"></a>7.4 运行</h3><p>在 DOS 命令行中，在字节码文件目录下，使用 <code>java</code> 命令进行运行：</p>
+<div class="code-container" data-rel="Dos"><figure class="iseeu highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java 主类名字</span><br></pre></td></tr></table></figure></div>
+
+<p>主类是指包括 main 方法的类，main 方法是 Java 程序的入口：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>举例：</p>
+<div class="code-container" data-rel="Dos"><figure class="iseeu highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java HelloChina</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>错误演示：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java HelloChina.class</span><br></pre></td></tr></table></figure></div>
+<p>在使用 <code>java</code> 命令运行时不需要添加后缀 <code>.class</code>！</p>
+</blockquote>
+<h3 id="7-5-建议"><a href="#7-5-建议" class="headerlink" title="7.5 建议"></a>7.5 建议</h3><p>注意缩进！</p>
+<ul>
+<li>一定要有缩进。缩进就像人得体的衣着一样！</li>
+<li>只要遇到 <code>&#123;&#125;</code> 就缩进，缩进的快捷键 tab 键。</li>
+</ul>
+<p>必要的空格：</p>
+<ul>
+<li>变量类型、变量、赋值符号、变量值之间填充相应空格，更美观。</li>
+<li>比如：<code>int num = 10;</code>。</li>
+</ul>
+<h3 id="7-6-第一个-HelloWorld-程序的总结"><a href="#7-6-第一个-HelloWorld-程序的总结" class="headerlink" title="7.6 第一个 HelloWorld 程序的总结"></a>7.6 第一个 HelloWorld 程序的总结</h3><h4 id="7-6-1-Java-程序编写和执行的过程"><a href="#7-6-1-Java-程序编写和执行的过程" class="headerlink" title="7.6.1 Java 程序编写和执行的过程"></a>7.6.1 Java 程序编写和执行的过程</h4><p>步骤 1：编写。将 Java 代码编写在 <code>.java</code> 结尾的源文件中。</p>
+<p>步骤 2：编译。针对 <code>.java</code> 结尾的源文件进行编译操作，格式为 <code>javac 源文件名.java</code>。</p>
+<p>步骤 3：运行。针对编译后生成的字节码文件，进行解释运行，格式为 <code>java 字节码文件名</code>。</p>
+<h4 id="7-6-2-针对步骤-1-的编写进行说明"><a href="#7-6-2-针对步骤-1-的编写进行说明" class="headerlink" title="7.6.2 针对步骤 1 的编写进行说明"></a>7.6.2 针对步骤 1 的编写进行说明</h4><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloChina</span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;hello, world!!你好，中国！&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>Java 程序的结构如下：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">类&#123;</span><br><span class="line">  方法&#123;</span><br><span class="line">    语句;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>Java 程序的格式如下：</p>
+<ul>
+<li>每一级缩进一个 Tab 键；</li>
+<li><code>&#123;&#125;</code> 的左半部分在行尾，右半部分单独一行，与和它成对的 <code>&#123;</code> 的行首对齐。</li>
+</ul>
+<p>其中：</p>
+<ol>
+<li><code>class</code>：关键字，表示“类”，后面跟着类名。</li>
+<li><code>main()</code> 方法的格式是固定的，表示 Java 程序的入口：<ul>
+<li><code>public static void main(String[] args)</code>；</li>
+<li>如果非要有些变化的话，只能变化 <code>String[] args</code> 结构。<ul>
+<li>可以写成：<ul>
+<li>方式 1：<code>String args[]</code>；</li>
+<li>方式 2：<code>String[] a</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><code>args</code>：全称是 arguments，简写成 args。</p>
+</blockquote>
+<ol start="3">
+<li>Java 程序，是严格区分大小写的。</li>
+<li>从控制台输出数据的操作：<ul>
+<li>（换行输出语句）<code>System.out.println()</code>：输出数据之后，会换行；<ul>
+<li>换行输出语句，括号内可以什么都不写，只做换行处理。</li>
+</ul>
+</li>
+<li>（直接输出语句）<code>System.out.print()</code>：输出数据之后，不会换行；<ul>
+<li>直接输出语句，括号内什么都不写的话，编译报错。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>每一句执行语句必须要以 <code>;</code> 结束。</li>
+</ol>
+<h4 id="7-6-3-针对于步骤-2-的编译进行说明"><a href="#7-6-3-针对于步骤-2-的编译进行说明" class="headerlink" title="7.6.3 针对于步骤 2 的编译进行说明"></a>7.6.3 针对于步骤 2 的编译进行说明</h4><p>如果编译不通过，可以考虑的问题：</p>
+<ol>
+<li>查看编译的文件名、文件路径是否书写错误；</li>
+</ol>
+<blockquote>
+<p>在 Windows 下使用 <code>javac</code> 进行编译时，由于 Windows 下的文件名不区分大小写，因此编译指定的文件名的大小写可以与实际的文件名的大小写不一致。</p>
+</blockquote>
+<ol start="2">
+<li>查看代码中是否存在语法问题。如果存在，就可能导致编译不通过。</li>
+</ol>
+<p>编译以后，会生成一个或多个字节码文件。每一个字节码文件对应一个 Java 类，并且字节码文件名与类名相同。</p>
+<blockquote>
+<p><code>.class</code> 文件是用于给 JVM 看的，而不是给人看的。</p>
+</blockquote>
+<h4 id="7-6-4-针对于步骤-3-的运行进行说明"><a href="#7-6-4-针对于步骤-3-的运行进行说明" class="headerlink" title="7.6.4 针对于步骤 3 的运行进行说明"></a>7.6.4 针对于步骤 3 的运行进行说明</h4><p>我们是针对于字节码文件对应的 Java 类进行解释运行的，所以要注意区分大小写！</p>
+<p>如果运行不通过，可以考虑的问题：</p>
+<ol>
+<li>查看解释运行的类名、字节码文件路径是否书写错误；</li>
+<li>可能存在运行时异常（放到第 9 章中具体讲解）。</li>
+</ol>
+<h4 id="7-6-5-源文件名与类名"><a href="#7-6-5-源文件名与类名" class="headerlink" title="7.6.5 源文件名与类名"></a>7.6.5 源文件名与类名</h4><p>一个源文件中可以声明多个类，但是最多只能有一个类使用 public 进行声明，且要求声明为 public 的类名必须与源文件名一致。</p>
+<p>总结如下：</p>
+<ol>
+<li>源文件名是否必须与类名一致？<code>public</code> 呢？</li>
+</ol>
+<ul>
+<li>如果这个类不是 <code>public</code>，那么源文件名可以和类名不一致。但是不便于代码维护。</li>
+<li>如果这个类是 public，那么要求源文件名必须与类名一致。否则编译报错。</li>
+<li>我们建议大家，不管是否是 <code>public</code>，都与源文件名保持一致，而且一个源文件尽量只写一个类，目的是为了好维护。</li>
+</ul>
+<ol start="2">
+<li>一个源文件中是否可以有多个类？<code>public</code> 呢？</li>
+</ol>
+<ul>
+<li>一个源文件中可以有多个类，编译后会生成多个 <code>.class</code> 字节码文件。</li>
+<li>但是一个源文件只能有一个 <code>public</code> 的类。</li>
+</ul>
+<h2 id="八、注释（comment）"><a href="#八、注释（comment）" class="headerlink" title="八、注释（comment）"></a>八、注释（comment）</h2><p>注释（comment）：源文件中用于解释、说明程序的文字就是注释。</p>
+<p>注释是一个程序员必须要具有的良好编程习惯。实际开发中，程序员可以先将自己的思想通过注释整理出来，再用代码去体现。</p>
+<p>Java 中的注释类型：</p>
+<ul>
+<li>单行注释：</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注释文字</span></span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>多行注释</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">注释文字 1</span></span><br><span class="line"><span class="comment">注释文字 2</span></span><br><span class="line"><span class="comment">注释文字 3</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>文档注释（Java 特有）</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> <span class="doctag">@author</span>  指定 java 程序的作者</span></span><br><span class="line"><span class="comment"> <span class="doctag">@version</span> 指定源文件的版本</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div>
+
+<p>注释的作用：</p>
+<ul>
+<li>它提升了程序的可阅读性；</li>
+<li>调试程序的重要方法。</li>
+</ul>
+<p>具体使用：</p>
+<ul>
+<li>单行注释、多行注释：<ul>
+<li>对于单行和多行注释，被注释的文字不会出现在字节码文件中，进而不会被 JVM（java 虚拟机）解释执行；</li>
+<li>多行注释里面不允许有多行注释嵌套。</li>
+</ul>
+</li>
+<li>文档注释（Java 特有）：<ul>
+<li>文档注释内容可以被 JDK 提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档；</li>
+<li>操作方式如：<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javadoc -d mydoc -author -version HelloWorld.java</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+</ul>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">这是多行注释。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">我们可以声明多行注释的信息！</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">1. Java 中的注释的种类：</span></span><br><span class="line"><span class="comment">单行注释、多行注释、文档注释（Java 特有）。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">2. 单行注释、多行注释的作用：</span></span><br><span class="line"><span class="comment">（1）对程序中的代码进行解释说明；</span></span><br><span class="line"><span class="comment">（2）对程序进行调试。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">3. 注意：</span></span><br><span class="line"><span class="comment">（1）单行注释和多行注释中声明的信息，不参与编译；换句话说，编译以后生成的字节码文件中不包含单行注释和多行注释中的信息；</span></span><br><span class="line"><span class="comment">（2）多行注释不能嵌套使用。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">4. 文档注释：</span></span><br><span class="line"><span class="comment">文档注释内容可以被 JDK 提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">这是我的第一个 Java 程序。很开森！^_^</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"><span class="doctag">@author</span> AnXin</span></span><br><span class="line"><span class="comment"><span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CommentTest</span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    这是 main() 方法。格式是固定的。（文档注释）</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    这是 main() 方法。格式是固定的。（多行注释）</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="comment">// 这是输出语句</span></span><br><span class="line">        System.out.println(<span class="string">&quot;hello, world!!&quot;</span>);</span><br><span class="line">        <span class="comment">// System.out.println(&quot;hello, world!!&quot;);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="九、Java-API-文档"><a href="#九、Java-API-文档" class="headerlink" title="九、Java API 文档"></a>九、Java API 文档</h2><p>Java API 文档：</p>
+<ul>
+<li>API（Application Programming Interface，应用程序编程接口）是 Java 提供的基本编程接口。</li>
+<li>Java 语言提供了大量的基础类，因此 Oracle 也为这些基础类提供了相应的说明文档，用于告诉开发者如何使用这些类，以及这些类里包含的方法。大多数 Java 书籍中的类的介绍都要参照它来完成，它是编程者经常查阅的资料。</li>
+<li>Java API 文档，即为 JDK 使用说明书、帮助文档。</li>
+<li>下载 API 文档：<ul>
+<li>在线看：<a class="link"   target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/17/docs/api/index.html" >在线看<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>；</li>
+<li>离线下载：<a class="link"   target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/javase-jdk17-doc-downloads.html" >离线下载<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="十、Java-核心机制：JVM"><a href="#十、Java-核心机制：JVM" class="headerlink" title="十、Java 核心机制：JVM"></a>十、Java 核心机制：JVM</h2><p>Java 确实是从 C 语言和 C++ 语言继承了许多成分，甚至可以将 Java 看成是类 C 语言发展和衍生的产物。“青出于蓝，而胜于蓝”。</p>
+<h3 id="10-1-Java-的优点与缺点"><a href="#10-1-Java-的优点与缺点" class="headerlink" title="10.1 Java 的优点与缺点"></a>10.1 Java 的优点与缺点</h3><p>Java 的优点如下：</p>
+<ul>
+<li>跨平台性：这是 Java 的核心优势。<ul>
+<li>“<code>Write once, Run Anywhere.</code>”。</li>
+<li>原理：只要在需要运行 java 应用程序的操作系统上，先安装一个 Java 虚拟机（JVM，Java Virtual Machine）即可。由 JVM 来负责 Java 程序在该系统中的运行。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/JVM%E7%9A%84%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%80%A7-1666858570703.jpg"
+                      alt="JVM 的跨平台性" title="JVM 的跨平台性"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20211217111217831.png"
+                      alt="不同平台及不同指令集"
+                ></li>
+</ul>
+</li>
+<li>面向对象性：<ul>
+<li>面向对象是一种程序设计技术，非常适合大型软件的设计和开发。面向对象编程支持封装、继承、多态等特性，让程序更好达到高内聚、低耦合的标准。</li>
+</ul>
+</li>
+<li>健壮性。</li>
+<li>安全性高。</li>
+<li>简单性。</li>
+<li>高性能。</li>
+</ul>
+<p>Java 的缺点如下：</p>
+<ul>
+<li>语法过于复杂、严谨。</li>
+<li>整个架构会比较重。</li>
+<li>并非适用于所有领域。</li>
+</ul>
+<h3 id="10-2-JVM-功能说明"><a href="#10-2-JVM-功能说明" class="headerlink" title="10.2 JVM 功能说明"></a>10.2 JVM 功能说明</h3><p>JVM（Java Virtual Machine，Java 虚拟机）：是一个虚拟的计算机，是 Java 程序的运行环境。JVM 具有指令集并使用不同的存储区域，负责执行指令，管理数据、内存、寄存器。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220310165805739.png"
+                      alt="JVM 在计算机中的位置" title="JVM 在计算机中的位置"
+                ></p>
+<h4 id="10-2-1-功能-1：实现-Java-程序的跨平台性"><a href="#10-2-1-功能-1：实现-Java-程序的跨平台性" class="headerlink" title="10.2.1 功能 1：实现 Java 程序的跨平台性"></a>10.2.1 功能 1：实现 Java 程序的跨平台性</h4><p>我们编写的 Java 代码，都运行在 JVM 之上。正是因为有了 JVM，才使得 Java 程序具备了跨平台性。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220513191856727.png"
+                      alt="JVM 功能 1 - 实现 Java 程序的跨平台性" title="JVM 功能 1 - 实现 Java 程序的跨平台性"
+                ></p>
+<p>使用 JVM 前后对比：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220514151716805.png"
+                      alt="使用 JVM 前后对比" title="使用 JVM 前后对比"
+                ></p>
+<h4 id="10-2-2-功能-2：自动内存管理（内存分配、内存回收）"><a href="#10-2-2-功能-2：自动内存管理（内存分配、内存回收）" class="headerlink" title="10.2.2 功能 2：自动内存管理（内存分配、内存回收）"></a>10.2.2 功能 2：自动内存管理（内存分配、内存回收）</h4><p>Java 程序在运行过程中，涉及到运算的数据的分配、存储等都由 JVM 来完成。</p>
+<p>Java 消除了程序员回收无用内存空间的职责。提供了一种系统级线程跟踪存储空间的分配情况，在内存空间达到相应阈值时，检查并释放可被释放的存储器空间。</p>
+<p>GC 的自动回收，提高了内存空间的利用效率，也提高了编程人员的效率，很大程度上减少了因为没有释放空间而导致的内存泄漏。</p>
+<blockquote>
+<p>面试题：</p>
+<p>Java 程序还会出现内存溢出和内存泄漏问题吗？</p>
+<ul>
+<li>Yes！</li>
+</ul>
+<p>解释：</p>
+<ul>
+<li>内存溢出：超出本身的内存容量。<ul>
+<li>溢出的数据并非无用垃圾，因此 Java 无法进行自动处理。</li>
+</ul>
+</li>
+<li>内存泄漏：JVM 并不认为某一处内存中的数据无用，因此将其忽略。<ul>
+<li>如果泄露内存过多，可能会导致内存溢出。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="十一、章节案例"><a href="#十一、章节案例" class="headerlink" title="十一、章节案例"></a>十一、章节案例</h2><h3 id="11-1-案例-1：个人信息输出"><a href="#11-1-案例-1：个人信息输出" class="headerlink" title="11.1 案例 1：个人信息输出"></a>11.1 案例 1：个人信息输出</h3><p>输出如下信息：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220315221336038.png"
+                      alt="案例 1" title="案例 1"
+                ></p>
+<p>示例代码：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PersonalInfo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;姓名：康师傅&quot;</span>);</span><br><span class="line">        System.out.println();   <span class="comment">// 换行的操作</span></span><br><span class="line">        System.out.println(<span class="string">&quot;性别：男&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;家庭住址：北京程序员聚集地：回龙观&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="11-2-案例-2：输出-心形"><a href="#11-2-案例-2：输出-心形" class="headerlink" title="11.2 案例 2：输出 心形"></a>11.2 案例 2：输出 心形</h3><p>结合 <code>\n</code>（换行）、<code>\t</code>（制表符）、空格等在控制台打印出如下图所示的效果。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image-20220309004152219-1646757896991.png"
+                      alt="案例 2" title="案例 2"
+                ></p>
+<p>示例代码：</p>
+<ul>
+<li>方式一：</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StarPrintTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;*&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;I love Java&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;*&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;*&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;*&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>方式二：</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StarPrintTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t\t\t\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;I love Java&quot;</span> + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t\t\t\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        System.out.print(<span class="string">&quot;\t\t\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;*&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="十二、随堂复习"><a href="#十二、随堂复习" class="headerlink" title="十二、随堂复习"></a>十二、随堂复习</h2><h3 id="12-1-Java-基础全程的学习内容"><a href="#12-1-Java-基础全程的学习内容" class="headerlink" title="12.1 Java 基础全程的学习内容"></a>12.1 Java 基础全程的学习内容</h3><p>第 1 阶段：Java 基本语法</p>
+<ul>
+<li>Java 概述、关键字、标识符、变量、运算符、流程控制（条件判断、选择结构、循环结构）、IDEA、数组。</li>
+</ul>
+<p>第 2 阶段：Java 面向对象编程</p>
+<ul>
+<li>类及类的内部成员；</li>
+<li>面向对象的三大特征；</li>
+<li>其他关键字的使用。</li>
+</ul>
+<p>第 3 阶段：</p>
+<ul>
+<li>异常处理、多线程、IO 流、集合框架、反射、网络编程、新特性、其他常用的 API 等。</li>
+</ul>
+<blockquote>
+<p>学习 Java 的神书：《Java 核心技术》、《Effective Java》、《Java 编程思想》。</p>
+</blockquote>
+<h3 id="12-2-软件开发相关内容"><a href="#12-2-软件开发相关内容" class="headerlink" title="12.2 软件开发相关内容"></a>12.2 软件开发相关内容</h3><h4 id="12-2-1-计算机的构成"><a href="#12-2-1-计算机的构成" class="headerlink" title="12.2.1 计算机的构成"></a>12.2.1 计算机的构成</h4><p>计算机的构成 &#x3D; 硬件 + 软件。</p>
+<h4 id="12-2-2-软件"><a href="#12-2-2-软件" class="headerlink" title="12.2.2 软件"></a>12.2.2 软件</h4><p>软件，即一系列按照特定顺序组织的计算机数据和指令的集合。有系统软件和应用软件之分。</p>
+<ul>
+<li>系统软件，即操作系统，如 Windows、Mac OS、Linux、Android、IOS；</li>
+<li>应用软件，即 OS 之上的应用程序。</li>
+</ul>
+<h4 id="12-2-3-人机交互方式"><a href="#12-2-3-人机交互方式" class="headerlink" title="12.2.3 人机交互方式"></a>12.2.3 人机交互方式</h4><p>人机交互方式有两种：</p>
+<ul>
+<li>图形化界面（GUI）；</li>
+<li>命令行交互方式（CLI）：<ul>
+<li>熟悉常用的 DOS 命令：<code>dir</code>、<code>cd</code>、<code>cd ..</code>、<code>cd/</code> <code>cd\</code>、<code>md</code>、<code>rd</code> 等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="12-2-4-计算机编程语言"><a href="#12-2-4-计算机编程语言" class="headerlink" title="12.2.4 计算机编程语言"></a>12.2.4 计算机编程语言</h4><p>语言的分代：</p>
+<ul>
+<li>第 1 代：机器语言。</li>
+<li>第 2 代：汇编语言。</li>
+<li>第 3 代：高级语言：<ul>
+<li>面向过程的语言：C；</li>
+<li>面向对象的语言：C++、Java、C#、Python、Go、JavaScript。</li>
+</ul>
+</li>
+</ul>
+<p>没有“最好”的语言，只有在特定场景下相对来说，最适合的语言而已。</p>
+<h3 id="12-3-Java-概述"><a href="#12-3-Java-概述" class="headerlink" title="12.3 Java 概述"></a>12.3 Java 概述</h3><h4 id="12-3-1-Java-发展史"><a href="#12-3-1-Java-发展史" class="headerlink" title="12.3.1 Java 发展史"></a>12.3.1 Java 发展史</h4><p>几个重要的版本：</p>
+<ul>
+<li>1996 年，发布 JDK 1.0；</li>
+<li>里程碑式的版本：JDK 5.0、JDK 8.0（2014 年发布）；</li>
+<li>JDK 11（LTS，long term support）、JDK 17（LTS）。</li>
+</ul>
+<h4 id="12-3-2-Java-之父"><a href="#12-3-2-Java-之父" class="headerlink" title="12.3.2 Java 之父"></a>12.3.2 Java 之父</h4><p>詹姆斯·高斯林。</p>
+<h4 id="12-3-3-Java-具体的平台划分"><a href="#12-3-3-Java-具体的平台划分" class="headerlink" title="12.3.3 Java 具体的平台划分"></a>12.3.3 Java 具体的平台划分</h4><p>J2SE -&gt; JavaSE；<br>J2EE -&gt; JavaEE；<br>J2ME -&gt; JavaME。</p>
+<p>Java 目前主要的应用场景：JavaEE 后台开发、Android 客户端的开发、大数据的开发。</p>
+<h3 id="12-4-Java-环境的搭建"><a href="#12-4-Java-环境的搭建" class="headerlink" title="12.4 Java 环境的搭建"></a>12.4 Java 环境的搭建</h3><p>需要掌握以下要点：</p>
+<ul>
+<li>JDK、JRE、JVM 三者之间的关系。</li>
+<li>JDK 的下载（官网）。</li>
+<li>JDK 的安装：<ul>
+<li>安装 JDK 8 和 JDK 17（课堂讲解）。</li>
+</ul>
+</li>
+<li>环境变量的配置（重要）。</li>
+</ul>
+<h3 id="12-5-HelloWorld-的编写和常见问题的解决（重点）"><a href="#12-5-HelloWorld-的编写和常见问题的解决（重点）" class="headerlink" title="12.5 HelloWorld 的编写和常见问题的解决（重点）"></a>12.5 HelloWorld 的编写和常见问题的解决（重点）</h3><p>第 1 个程序：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloChina</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;hello, world!!你好，中国！&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>测试程序：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloJava</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">		System.out.println(<span class="number">10</span>/<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HelloShangHai</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HelloBeijing</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="12-6-注释的使用"><a href="#12-6-注释的使用" class="headerlink" title="12.6 注释的使用"></a>12.6 注释的使用</h3><p>示例代码：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">这是多行注释。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">我们可以声明多行注释的信息！</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">1. Java 中的注释的种类：</span></span><br><span class="line"><span class="comment">单行注释、多行注释、文档注释（Java 特有）。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">2. 单行注释、多行注释的作用：</span></span><br><span class="line"><span class="comment">（1）对程序中的代码进行解释说明；</span></span><br><span class="line"><span class="comment">（2）对程序进行调试。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">3. 注意：</span></span><br><span class="line"><span class="comment">（1）单行注释和多行注释中声明的信息，不参与编译；换句话说，编译以后生成的字节码文件中不包含单行注释和多行注释中的信息；</span></span><br><span class="line"><span class="comment">（2）多行注释不能嵌套使用。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">4. 文档注释：</span></span><br><span class="line"><span class="comment">文档注释内容可以被 JDK 提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">这是我的第一个 Java 程序。很开森！^_^</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"><span class="doctag">@author</span> AnXin</span></span><br><span class="line"><span class="comment"><span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CommentTest</span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    这是 main() 方法。格式是固定的。（文档注释）</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    这是 main() 方法。格式是固定的。（多行注释）</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="comment">// 这是输出语句</span></span><br><span class="line">        System.out.println(<span class="string">&quot;hello, world!!&quot;</span>);</span><br><span class="line">        <span class="comment">// System.out.println(&quot;hello, world!!&quot;);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="12-7-API-文档"><a href="#12-7-API-文档" class="headerlink" title="12.7 API 文档"></a>12.7 API 文档</h3><h3 id="12-8-练习"><a href="#12-8-练习" class="headerlink" title="12.8 练习"></a>12.8 练习</h3><h2 id="十三、企业真题"><a href="#十三、企业真题" class="headerlink" title="十三、企业真题"></a>十三、企业真题</h2><p><strong>1. （明 * 数据）一个 <code>.java</code> 源文件中是否可以包括多个类？有什么限制？</strong><br>答：</p>
+<ul>
+<li>一个 <code>.java</code> 源文件中是可以包括多个类。</li>
+<li>一个源文件中可以声明多个类，但是最多只能有一个类使用 public 进行声明。且要求声明为 public 的类的类名与源文件名相同。</li>
+</ul>
+<p><strong>2. （阿 ** 巴）Java 的优势？</strong><br>答：</p>
+<ul>
+<li>跨平台型；</li>
+<li>安全性高；</li>
+<li>简单性；</li>
+<li>高性能；</li>
+<li>面向对象性；</li>
+<li>健壮性。</li>
+</ul>
+<p><strong>3. （北京数字 **）常用的几个命令行操作都有哪些（至少 4 个）？</strong></p>
+<ul>
+<li>见上述随堂复习。</li>
+</ul>
+<p><strong>4. （拼 * 多）Java 中是否存在内存溢出、内存泄漏？如何解决？举例说明。</strong><br>答：</p>
+<ul>
+<li>存在。</li>
+<li>就目前所学知识无法给出解决举例。</li>
+</ul>
+<p><strong>5. （携 *）如何看待 Java 是一门半编译半解释型的语言？</strong><br>答：<br>如下图所示：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../images/1_Java%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0/image002.jpg"
+                      alt="对于“Java 是一门半编译半解释型的语言”的说明" title="对于“Java 是一门半编译半解释型的语言”的说明"
+                ><br>对于部分字节码，Java 将会逐行解释执行；而对于部分热点代码，Java 将会通过 JIT（即时编译器）编译执行。这样有助于提高代码执行效率。</p>
+<h2 id="十四、学习的方法和经验"><a href="#十四、学习的方法和经验" class="headerlink" title="十四、学习的方法和经验"></a>十四、学习的方法和经验</h2><h3 id="14-1-学习方法"><a href="#14-1-学习方法" class="headerlink" title="14.1 学习方法"></a>14.1 学习方法</h3><p>认知上：</p>
+<ul>
+<li>衡量学的好坏的标准是：编码能力。如何提高编码能力：多敲！多敲！多敲！<ul>
+<li>多敲代码！融会贯通！</li>
+<li>将编程知识通过不断练习，从而变成自己的技能。</li>
+<li>理论与例题相结合。</li>
+<li>会变通，多反思。</li>
+</ul>
+</li>
+<li>“好”程序员的标准：<ul>
+<li>敲过多少行代码？</li>
+<li>调过多少 BUG？</li>
+</ul>
+</li>
+<li>“模仿”好的编码习惯：<ul>
+<li>比尔盖茨：成为程序员的最佳途径是编写程序并研究其他人编写的优秀程序。</li>
+</ul>
+</li>
+<li>初学者切记：不要贪多，只需要每天把握重点，搞定重点，就是优秀！</li>
+</ul>
+<p>行动上：</p>
+<ul>
+<li>比方法更重要的是 …<ul>
+<li>勤奋！自律！</li>
+<li>要求：上课的重点代码至少每个 3 遍。</li>
+<li>面对问题：培养自己成“百度”搜索解决问题的高手。</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-2-学习习惯"><a href="#14-2-学习习惯" class="headerlink" title="14.2 学习习惯"></a>14.2 学习习惯</h3><p>宏观上：</p>
+<ul>
+<li>大处着眼，小处着手。</li>
+<li>今日事，今日毕。</li>
+</ul>
+<p>微观上：</p>
+<ul>
+<li>3 W：<ul>
+<li>What？</li>
+<li>Why？</li>
+<li>How？</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-3-鸡汤"><a href="#14-3-鸡汤" class="headerlink" title="14.3 鸡汤"></a>14.3 鸡汤</h3><p>如果你没有过人的天赋，又不肯把别人睡觉的时间用在学习上，那么渴望成为“优秀的软件开发工程师”只能是个遥远的梦。</p>
+<p>站在岸上学不会游泳。</p>
+<p>大师失败的次数比新手尝试过的次数都多。</p>
+<p>要为成功找理由，不为失败找借口。</p>
+<p>代码虐我千百遍，我视代码如初恋。</p>
+<h3 id="14-4-困惑"><a href="#14-4-困惑" class="headerlink" title="14.4 困惑"></a>14.4 困惑</h3><ol>
+<li>老师我代码中的单词不认识？咋整？！死记硬背？</li>
+<li>每天怎么听课，效果好一些呢？</li>
+<li>每天知识听得懂，但是动手写就不行了？怎么办？</li>
+<li>代码写到什么程度就算是合格了呢？</li>
+<li>除去看视频，剩下敲和整理笔记的时间如何分配合适呢？</li>
+<li>每天学了新的忘了旧的，还去每天复习之前的，感觉越滚越多，整不过来了。</li>
+<li>是不是把当前专题内容整的透透的了，才能学习下一个专题？</li>
+<li>现在蒙，是不是相较于以后的知识来讲，还只是冰山一角？</li>
+</ol>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 【尚硅谷】 第一章：Java 语言概述</li>
+        <li><strong>作者:</strong> AnXin</li>
+        <li><strong>创建于
+                :</strong> 2025-10-04 13:38:36</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-10-04 13:43:32
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://anxin-hitsz.github.io/2025/10/04/【尚硅谷】-第一章：Java-语言概述/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/10/04/%E3%80%90%E5%B0%9A%E7%A1%85%E8%B0%B7%E3%80%91-%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%8F%98%E9%87%8F%E4%B8%8E%E8%BF%90%E7%AE%97%E7%AC%A6/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【尚硅谷】 第二章：变量与运算符</span>
+						<span class="post-nav-item">上一篇</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/04/%E3%80%90%E5%B0%9A%E7%A1%85%E8%B0%B7%E3%80%91-%E7%AC%AC%E9%9B%B6%E7%AB%A0%EF%BC%9AJava-%E6%96%B0%E7%89%88%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B%E7%AE%80%E4%BB%8B/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【尚硅谷】 第零章：Java 新版视频教程简介</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">【尚硅谷】 第一章：Java 语言概述</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Java-%E7%9F%A5%E8%AF%86%E8%84%89%E7%BB%9C%E5%9B%BE"><span class="nav-text">一、Java 知识脉络图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Java-%E5%9F%BA%E7%A1%80%E5%85%A8%E7%A8%8B%E8%84%89%E7%BB%9C%E5%9B%BE"><span class="nav-text">1.1 Java 基础全程脉络图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%8A%BD%E4%B8%9D%E5%89%A5%E8%8C%A7%E8%AF%9D-Java"><span class="nav-text">二、抽丝剥茧话 Java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%A1%AC%E4%BB%B6%E4%B8%8E%E8%BD%AF%E4%BB%B6"><span class="nav-text">三、计算机的硬件与软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%EF%BC%9A%E7%A1%AC%E4%BB%B6-%E8%BD%AF%E4%BB%B6"><span class="nav-text">3.1 计算机组成：硬件 + 软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="nav-text">3.2 计算机硬件的介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%BD%AF%E4%BB%B6%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D"><span class="nav-text">3.3 软件相关介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80"><span class="nav-text">四、计算机编程语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81Java-%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0"><span class="nav-text">五、Java 语言概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Java-%E6%A6%82%E8%BF%B0"><span class="nav-text">5.1 Java 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Java-%E8%AF%AD%E8%A8%80%E7%AE%80%E5%8F%B2"><span class="nav-text">5.2 Java 语言简史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Java-%E4%B9%8B%E7%88%B6"><span class="nav-text">5.3 Java 之父</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-Java-%E6%8A%80%E6%9C%AF%E4%BD%93%E7%B3%BB%E5%B9%B3%E5%8F%B0"><span class="nav-text">5.4 Java 技术体系平台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Java-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-text">六、Java 开发环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E4%BB%80%E4%B9%88%E6%98%AF-JDK%E3%80%81JRE"><span class="nav-text">6.1 什么是 JDK、JRE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-JDK-%E7%9A%84%E4%B8%8B%E8%BD%BD"><span class="nav-text">6.2 JDK 的下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E9%85%8D%E7%BD%AE-path-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">6.3 配置 path 环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%BC%80%E5%8F%91%E4%BD%93%E9%AA%8C%EF%BC%9AHelloWorld"><span class="nav-text">七、开发体验：HelloWorld</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="nav-text">7.1 开发步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E7%BC%96%E5%86%99"><span class="nav-text">7.2 编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E7%BC%96%E8%AF%91"><span class="nav-text">7.3 编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-%E8%BF%90%E8%A1%8C"><span class="nav-text">7.4 运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-%E5%BB%BA%E8%AE%AE"><span class="nav-text">7.5 建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-6-%E7%AC%AC%E4%B8%80%E4%B8%AA-HelloWorld-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%80%BB%E7%BB%93"><span class="nav-text">7.6 第一个 HelloWorld 程序的总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%B3%A8%E9%87%8A%EF%BC%88comment%EF%BC%89"><span class="nav-text">八、注释（comment）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81Java-API-%E6%96%87%E6%A1%A3"><span class="nav-text">九、Java API 文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81Java-%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6%EF%BC%9AJVM"><span class="nav-text">十、Java 核心机制：JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-Java-%E7%9A%84%E4%BC%98%E7%82%B9%E4%B8%8E%E7%BC%BA%E7%82%B9"><span class="nav-text">10.1 Java 的优点与缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-JVM-%E5%8A%9F%E8%83%BD%E8%AF%B4%E6%98%8E"><span class="nav-text">10.2 JVM 功能说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E7%AB%A0%E8%8A%82%E6%A1%88%E4%BE%8B"><span class="nav-text">十一、章节案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-1-%E6%A1%88%E4%BE%8B-1%EF%BC%9A%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E8%BE%93%E5%87%BA"><span class="nav-text">11.1 案例 1：个人信息输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-2-%E6%A1%88%E4%BE%8B-2%EF%BC%9A%E8%BE%93%E5%87%BA-%E5%BF%83%E5%BD%A2"><span class="nav-text">11.2 案例 2：输出 心形</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E9%9A%8F%E5%A0%82%E5%A4%8D%E4%B9%A0"><span class="nav-text">十二、随堂复习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#12-1-Java-%E5%9F%BA%E7%A1%80%E5%85%A8%E7%A8%8B%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%86%85%E5%AE%B9"><span class="nav-text">12.1 Java 基础全程的学习内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-2-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9"><span class="nav-text">12.2 软件开发相关内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-3-Java-%E6%A6%82%E8%BF%B0"><span class="nav-text">12.3 Java 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-4-Java-%E7%8E%AF%E5%A2%83%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-text">12.4 Java 环境的搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-5-HelloWorld-%E7%9A%84%E7%BC%96%E5%86%99%E5%92%8C%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="nav-text">12.5 HelloWorld 的编写和常见问题的解决（重点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-6-%E6%B3%A8%E9%87%8A%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">12.6 注释的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-7-API-%E6%96%87%E6%A1%A3"><span class="nav-text">12.7 API 文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-8-%E7%BB%83%E4%B9%A0"><span class="nav-text">12.8 练习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E4%BC%81%E4%B8%9A%E7%9C%9F%E9%A2%98"><span class="nav-text">十三、企业真题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E7%BB%8F%E9%AA%8C"><span class="nav-text">十四、学习的方法和经验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#14-1-%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><span class="nav-text">14.1 学习方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-2-%E5%AD%A6%E4%B9%A0%E4%B9%A0%E6%83%AF"><span class="nav-text">14.2 学习习惯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-3-%E9%B8%A1%E6%B1%A4"><span class="nav-text">14.3 鸡汤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-4-%E5%9B%B0%E6%83%91"><span class="nav-text">14.4 困惑</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+            <div class="customize-info my-1">Code is cheap, show me the prompt.</div>
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">AnXin</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 11 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
